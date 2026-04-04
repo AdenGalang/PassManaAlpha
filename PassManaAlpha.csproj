@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+	  <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="assets\Home.jpg" />
+    <None Remove="assets\kazusa_L2D.mp4" />
+    <None Remove="assets\kazusa_r.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\kazusa_L2D.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Font\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+    <PackageReference Include="ModernWPF" Version="1.4.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\Home.jpg" />
+    <Resource Include="assets\kazusa_r.jpg" />
+  </ItemGroup>
+
+</Project>
