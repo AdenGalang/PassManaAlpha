@@ -2,7 +2,7 @@
 ## Usage -just in case i forget
 1. Open Settings and set your master key
 2. Go to Passwords and save entries
-3. Load loads only entries matching your current key
+3. "Load" only loads entries matching your current key
    
 ## Notes
 - Vault is stored as `vault.dat` next to the executable
