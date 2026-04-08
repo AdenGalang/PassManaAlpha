@@ -13,7 +13,6 @@ namespace PassManaAlpha.MVVM.ViewModel
     {
         private readonly SettingsViewModel _settingsVM;
 
-        // Single source of truth — always reads live from SettingsVM
         internal string MasterKey => _settingsVM.MasterKey;
 
         public string? InputTitle { get; set; }
@@ -80,8 +79,13 @@ namespace PassManaAlpha.MVVM.ViewModel
             string json = JsonSerializer.Serialize(entry);
             string encrypted;
 
+
+
             try { encrypted = HakoHelper.Encrypt(json, MasterKey); }
             catch (Exception ex) { Log($"Encryption failed: {ex.Message}"); return; }
+
+            BackupVault();
+            File.AppendAllText(VaultPath, encrypted + Environment.NewLine);
 
             try
             {
@@ -123,7 +127,7 @@ namespace PassManaAlpha.MVVM.ViewModel
                 {
                     string? decrypted = HakoHelper.Decrypt(line, MasterKey);
 
-                    if (decrypted == null) // HMAC mismatch — belongs to a different key
+                    if (decrypted == null) 
                     {
                         skipped++;
                         continue;
@@ -144,5 +148,30 @@ namespace PassManaAlpha.MVVM.ViewModel
             Log($"Loaded {loaded} entr{(loaded == 1 ? "y" : "ies")}." +
                 (skipped > 0 ? $" {skipped} entr{(skipped == 1 ? "y belongs" : "ies belong")} to a different key." : ""));
         });
+
+        private static readonly string VaultPath = "vault.dat";
+        private static readonly string BackupFolder = "backups";
+
+        internal void BackupVault()
+        {
+            if (!File.Exists(VaultPath)) return;
+
+            Directory.CreateDirectory(BackupFolder);
+
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string backupPath = Path.Combine(BackupFolder, $"vault_{timestamp}.dat");
+
+            File.Copy(VaultPath, backupPath);
+
+            var backups = Directory.GetFiles(BackupFolder, "vault_*.dat")
+                .OrderBy(f => f)
+                .ToList();
+
+            while (backups.Count > 10)
+            {
+                File.Delete(backups[0]);
+                backups.RemoveAt(0);
+            }
+        }
     }
 }

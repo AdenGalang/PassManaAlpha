@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:PassManaAlpha"
         xmlns:viewModel="clr-namespace:PassManaAlpha.MVVM.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="" 
         Height="600" 
         Width="930"
         WindowStyle="SingleBorderWindow"
         ResizeMode="NoResize"
-        Background="AliceBlue"
+        Background="Transparent"
         >
 
     <Window.DataContext>
@@ -48,7 +48,7 @@
                     <!-- space -->
                 </Grid>
             </Border>
-
+            
             <ContentControl Grid.Row="1" Grid.Column="1" Margin="3"
                             Content="{Binding CurrentView}">
             </ContentControl>

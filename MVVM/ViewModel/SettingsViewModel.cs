@@ -22,7 +22,7 @@ namespace PassManaAlpha.MVVM.ViewModel
         public SettingsViewModel()
         {
             _config = AppConfig.Load();
-            MasterKey = _config.MasterKey; // may be empty on first run
+            MasterKey = _config.MasterKey;
         }
 
         public ICommand SaveKeyCommand => new RelayCommand(o =>

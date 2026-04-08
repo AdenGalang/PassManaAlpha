@@ -10,15 +10,22 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using MahApps.Metro.IconPacks;
 
 namespace PassManaAlpha.MVVM.View
 {
     public class BoolToEyeConverter : IValueConverter
     {
         public static readonly BoolToEyeConverter Instance = new();
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            => value is bool b && b ? "👁" : "🔒";
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+       
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return value is bool b && b
+            ? PackIconMaterialKind.Eye
+            : PackIconMaterialKind.EyeOff;
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
 
@@ -33,8 +40,6 @@ namespace PassManaAlpha.MVVM.View
             
         }
 
-        // ── Helpers ───────────────────────────────────────────────────────────
-
         private PasswordViewModel? VM => DataContext as PasswordViewModel;
 
         private void CopyToClipboard(string text, string label)
@@ -43,9 +48,6 @@ namespace PassManaAlpha.MVVM.View
             VM?.Log($"Copied {label} to clipboard.");
         }
 
-        // ── Double-click: copy password ───────────────────────────────────────
-        // Border doesn't support MouseDoubleClick so we use MouseLeftButtonDown
-        // and check ClickCount == 2 ourselves.
 
         private void EntryBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -57,8 +59,6 @@ namespace PassManaAlpha.MVVM.View
                 CopyToClipboard(entry.Password, "password");
             }
         }
-
-        // ── Right-click context menu ──────────────────────────────────────────
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
@@ -97,8 +97,6 @@ namespace PassManaAlpha.MVVM.View
             }
         }
 
-        // ── Delete ────────────────────────────────────────────────────────────
-
         private void DeleteEntry(PasswordEntry entry)
         {
             var vm = VM;
@@ -122,7 +120,7 @@ namespace PassManaAlpha.MVVM.View
                     string encrypted = Core.Scurity.HakoHelper.Encrypt(json, vm.MasterKey);
                     lines.Add(encrypted);
                 }
-
+                vm.BackupVault(); 
                 File.WriteAllLines("vault.dat", lines);
                 vm.Log($"Deleted \"{entry.Title}\" and rewrote vault.");
             }
@@ -131,8 +129,6 @@ namespace PassManaAlpha.MVVM.View
                 vm.Log($"Failed to rewrite vault after delete: {ex.Message}");
             }
         }
-
-        // ── Eye toggle ────────────────────────────────────────────────────────
 
         private void EyeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -146,8 +142,6 @@ namespace PassManaAlpha.MVVM.View
             }
         }
 
-        // ── Mouse activity ────────────────────────────────────────────────────
-
         private void EntryBorder_MouseActivity(object sender, MouseEventArgs e)
         {
             if (sender is Border border && border.Tag is PasswordEntry entry && entry.IsPasswordVisible)
@@ -159,8 +153,6 @@ namespace PassManaAlpha.MVVM.View
             if (sender is Border border && border.Tag is PasswordEntry entry && entry.IsPasswordVisible)
                 StartOrResetTimer(entry);
         }
-
-        // ── Timer helpers ─────────────────────────────────────────────────────
 
         private void StartOrResetTimer(PasswordEntry entry)
         {

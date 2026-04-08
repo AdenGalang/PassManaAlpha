@@ -9,23 +9,11 @@
 
     <UserControl.Resources>
         <Storyboard x:Key="FadeOutStoryboard">
-            <DoubleAnimation 
-                Storyboard.TargetName="kazusa" 
-                Storyboard.TargetProperty="Opacity"
-                From="1" To="0"
-                BeginTime="0:0:1"
-                Duration="0:0:2"/>
+            <DoubleAnimation Storyboard.TargetName="kazusa"  Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:1" Duration="0:0:2"/>
         </Storyboard>
     </UserControl.Resources>
     <Grid>
-        <Image x:Name="kazusa" 
-               Source="/assets/Home.jpg" 
-               Width="688"
-               Stretch="UniformToFill"
-               HorizontalAlignment="Center" 
-               VerticalAlignment="Top"
-               Margin="0,-2,0,0"
-               Visibility="Hidden"
+        <Image x:Name="kazusa" Source="/assets/Home.jpg"  Width="688" Stretch="UniformToFill" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="0,-2,0,0" Visibility="Hidden"
        Opacity="0"/>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="224,0,0,0" Width="386" Height="141">
             <StackPanel.Background>
